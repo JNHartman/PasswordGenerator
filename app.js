@@ -22,7 +22,7 @@ function getRandomUpper() {
 console.log(getRandomUpper());
 
 function getRandomLower() {
-
+    // Running the "randomLetter" function to create a random letter and returning it from the function
     return randomLetter();
 }
 console.log(getRandomLower());
@@ -85,22 +85,18 @@ function generatePassword(upper, lower, number, symbol, length) {
     ];
 
     // The filter method creates a new array with all the elements that pass the test implemented by the provided function
-    typesArr.filter(item => {
+    typesArr = typesArr.filter(item => {
         console.log(item[1]);
-        return
+        return item[1];
     });
     console.log(typesArr);
 
-
-    // let typesArr = [
-    //   [`upper`, upper]
-    // ];
     // 3. Loop over the length and call the generator function for each checked type
     // Building password with a for loop
     for (i = 0; i < length; i += typesCount) {
         typesArr.forEach(type => {
             const funcName = type[0];
-            console.log(funcName);
+            // console.log(funcName);
             generatedPassword += randomFunc[funcName]();
             console.log(generatedPassword);
         });
@@ -112,7 +108,6 @@ function generatePassword(upper, lower, number, symbol, length) {
 
     return finalPassword;
 }
-
 // generatePassword(true, true, true, true, 5);
 
 // Event listener for when the "Generate Password" button is clicked
@@ -127,10 +122,33 @@ generateEl.addEventListener(`click`, () => {
     const hasSymbol = symbolsEl.checked;
 
     console.log(hasUpper, hasLower, hasNumber, hasSymbol, length);
+
+    // The generatePassword function takes the true/false values determined by the checkboxes as well as the number from the number input as arguments and returns a string (AKA The generated password) which is set as the value for the innerText property for the result element/span
+    resultEl.innerText = generatePassword(hasUpper, hasLower, hasNumber, hasSymbol, length);
 });
 
-
-
-
-
-
+// Copy password to clipboard
+clipboardEl.addEventListener(`click`, () => {
+    const textArea = document.createElement(`textarea`);
+    const password = resultEl.innerText;
+  
+    // If user clicks clipboard while no password is displayed the function will end and nothing will be copied to the clipboard
+    if (password === ""){
+      alert(`Please generate a password first`);
+      return;
+    }
+  
+  // Setting the value for the textArea to the password that is currently being displayed
+  textArea.value = password;
+  // Selecting the body element
+  const body = document.querySelector(`body`);
+  // Adding the textarea to the webpage
+  body.append(textArea);
+  // Selecting the value inside the textarea
+  textArea.select();
+  // Copying the selected value
+  document.execCommand(`copy`);
+  // Removing the textarea element from the webpage/document
+  textArea.remove();
+  alert(`Password has been copied to the clipboard!`);
+});
